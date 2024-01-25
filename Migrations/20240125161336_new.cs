@@ -5,7 +5,7 @@
 namespace ConsoleApp2.Migrations
 {
     /// <inheritdoc />
-    public partial class relations : Migration
+    public partial class @new : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,18 +53,20 @@ namespace ConsoleApp2.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ManufacturerId = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    ManufacturerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_Categories_Id",
-                        column: x => x.Id,
+                        name: "FK_Products_Categories_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -72,20 +74,21 @@ namespace ConsoleApp2.Migrations
                         name: "FK_Products_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
                         principalTable: "Manufacturers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "ProductSuppliers",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     SupplierId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductSuppliers", x => new { x.SupplierId, x.ProductId });
+                    table.PrimaryKey("PK_ProductSuppliers", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ProductSuppliers_Products_ProductId",
                         column: x => x.ProductId,
@@ -101,6 +104,11 @@ namespace ConsoleApp2.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_CategoryId",
+                table: "Products",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_ManufacturerId",
                 table: "Products",
                 column: "ManufacturerId");
@@ -109,6 +117,11 @@ namespace ConsoleApp2.Migrations
                 name: "IX_ProductSuppliers_ProductId",
                 table: "ProductSuppliers",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductSuppliers_SupplierId",
+                table: "ProductSuppliers",
+                column: "SupplierId");
         }
 
         /// <inheritdoc />

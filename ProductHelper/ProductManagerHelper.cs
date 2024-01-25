@@ -105,14 +105,16 @@ namespace ConsoleApp2.ProductHelper
                 return null;
             }
 
-            Console.WriteLine("Write Produc Category Id:");
+            Console.WriteLine("Write Product Category Id:");
             int categoryId = int.Parse(Console.ReadLine());
+            
             
             return new Product
             {
                 Name = name,
                 Description = description,
                 Price = price,
+                CategoryId = categoryId
             };
         }
     }

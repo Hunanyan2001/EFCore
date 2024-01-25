@@ -10,10 +10,12 @@
 
         public string Description { get; set; }
 
+        public int CategoryId { get; set; }
+
         public Category Category { get; set; }
 
-        public Manufacturer Manufacturer { get; set; }
+        //public Manufacturer Manufacturer { get; set; }
 
-        public ICollection<ProductSupplier> ProductSupplier { get; set; }
+        //public ICollection<ProductSupplier> ProductSupplier { get; set; }
     }
 }

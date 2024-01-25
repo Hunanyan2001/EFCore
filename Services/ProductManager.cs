@@ -18,12 +18,7 @@ namespace ConsoleApp2.Manager
         {
             try
             {
-                await _dbContext.AddAsync(new Product
-                {
-                    Name = P.Name,
-                    Price = P.Price,
-                    Description = P.Description,
-                });
+                await _dbContext.AddAsync(P);
 
                 await _dbContext.SaveChangesAsync();
 

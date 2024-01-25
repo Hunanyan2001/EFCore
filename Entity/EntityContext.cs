@@ -24,28 +24,28 @@ namespace ConsoleApp2.Entity
                         .HasOne(p => p.Category)
                         .WithMany(c => c.Products)
                         // if forign key not set default set product id forign key
-                        .HasForeignKey(p => p.Id)
+                        .HasForeignKey(p => p.CategoryId)
                         .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Product>()
-                        .HasOne(p => p.Manufacturer)
-                        .WithMany(c => c.Products)
-                        .OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<Product>()
+            //            .HasOne(p => p.Manufacturer)
+            //            .WithMany(c => c.Products)
+            //            .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ProductSupplier>()
-                        .HasKey(m => new { m.SupplierId, m.ProductId });
+            //modelBuilder.Entity<ProductSupplier>()
+            //            .HasKey(m => new { m.SupplierId, m.ProductId });
 
-            modelBuilder.Entity<ProductSupplier>()
-                        .HasOne(ps => ps.Product)
-                        .WithMany(p => p.ProductSupplier)
-                        .HasForeignKey(ps => ps.ProductId)
-                        .OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<ProductSupplier>()
+            //            .HasOne(ps => ps.Product)
+            //            .WithMany(p => p.ProductSupplier)
+            //            .HasForeignKey(ps => ps.ProductId)
+            //            .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<ProductSupplier>()
-                        .HasOne(ps => ps.Supplier)
-                        .WithMany(s => s.ProductSupplier)
-                        .HasForeignKey(ps => ps.SupplierId)
-                        .OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<ProductSupplier>()
+            //            .HasOne(ps => ps.Supplier)
+            //            .WithMany(s => s.ProductSupplier)
+            //            .HasForeignKey(ps => ps.SupplierId)
+            //            .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
          }
