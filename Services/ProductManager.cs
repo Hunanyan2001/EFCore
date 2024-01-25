@@ -6,19 +6,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConsoleApp2.Manager
 {
-    public class ProductManager : IProductManager
+    public class ProductManager : IRepositary<Product> 
     {
         private readonly EntityContext _dbContext;
+
         public ProductManager(EntityContext dbContext) 
         {
             _dbContext = dbContext;
         }
 
-        public async Task<ResultModel> AddProductAsync(Product P)
+        public async Task<ResultModel> AddAsync(Product product)
         {
             try
             {
-                await _dbContext.AddAsync(P);
+                await _dbContext.AddAsync(product);
 
                 await _dbContext.SaveChangesAsync();
 
@@ -30,7 +31,7 @@ namespace ConsoleApp2.Manager
             }
         }
 
-        public async Task<ResultModel> DeleteProductAsync(int productId)
+        public async Task<ResultModel> DeleteAsync(int productId)
         {
             try
             {
@@ -51,7 +52,7 @@ namespace ConsoleApp2.Manager
             }
         }
 
-        public async Task<ResultModel> UpdateProductAsync(Product updatedProduct)
+        public async Task<ResultModel> UpdateAsync(Product updatedProduct)
         {
             try
             {
@@ -73,18 +74,32 @@ namespace ConsoleApp2.Manager
             }
         }
 
-        public async Task<Product> GetProductByIdAsync(int productId)
+        public async Task<Product> GetByIdAsync(int productId)
         {
-            var product = await _dbContext.Products.FindAsync(productId);
-            if (product == null) return null;
-            return product;
+            try
+            {
+                var product = await _dbContext.Products.FindAsync(productId);
+                if (product == null) return null;
+                return product;
+            }
+            catch 
+            {
+                return null;
+            }
         }
 
-        public async Task<List<Product>> GetAllProductAsync()
+        public async Task<List<Product>> GetAllAsync()
         {
-            var products = await _dbContext.Products.ToListAsync();
-            if (!products.Any()) return null;
-            return products;
+            try
+            {
+                var products = await _dbContext.Products.ToListAsync();
+                if (!products.Any()) return null;
+                return products;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

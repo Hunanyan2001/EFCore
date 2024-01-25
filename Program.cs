@@ -1,7 +1,9 @@
 ﻿using ConsoleApp2.Entity;
 using ConsoleApp2.Interface;
 using ConsoleApp2.Manager;
+using ConsoleApp2.Models;
 using ConsoleApp2.ProductHelper;
+using ConsoleApp2.Services;
 
 namespace ConsoleApp2
 {
@@ -10,9 +12,10 @@ namespace ConsoleApp2
         static void Main(string[] args)
         {
             var dbContext = new EntityContext();
-            IProductManager productManager = new ProductManager(dbContext);
+            IRepositary<Product> productManager = new ProductManager(dbContext);
+            IRepositary<Category> cattegoryManager = new CategoryManager(dbContext);
 
-            ProductManagerHelper helper = new ProductManagerHelper(productManager);
+            ProductManagerHelper helper = new ProductManagerHelper(productManager,cattegoryManager);
             while (true)
             {
                 PrintMenu();
@@ -64,6 +67,7 @@ namespace ConsoleApp2
 
         enum MenuOptions
         {
+            Wait,
             AddProduct,
             DeleteProduct,
             UpdateProduct,

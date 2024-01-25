@@ -51,7 +51,7 @@ namespace ConsoleApp2.Entity
          }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-I6JDFV5;Database=Library;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Library;Trusted_Connection=True;");
             base.OnConfiguring(optionsBuilder);
         }
     }
