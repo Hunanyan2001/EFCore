@@ -13,9 +13,11 @@ namespace ConsoleApp2
         {
             var dbContext = new EntityContext();
             IRepositary<Product> productManager = new ProductManager(dbContext);
-            IRepositary<Category> cattegoryManager = new CategoryManager(dbContext);
+            IRepositary<Category> categoiryManager = new CategoryManager(dbContext);
+            IRepositary<Manufacturer> manufacturerManager = new ManufacturerManager(dbContext);
 
-            ProductManagerHelper helper = new ProductManagerHelper(productManager,cattegoryManager);
+
+            ProductManagerHelper helper = new ProductManagerHelper(productManager, categoiryManager, manufacturerManager);
             while (true)
             {
                 PrintMenu();

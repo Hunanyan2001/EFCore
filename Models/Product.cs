@@ -14,8 +14,10 @@
 
         public Category Category { get; set; }
 
-        //public Manufacturer Manufacturer { get; set; }
+        public int ManufacturerId { get; set; }
 
-        //public ICollection<ProductSupplier> ProductSupplier { get; set; }
+        public Manufacturer Manufacturer { get; set; }
+
+        public ICollection<ProductSupplier> ProductSupplier { get; set; }
     }
 }

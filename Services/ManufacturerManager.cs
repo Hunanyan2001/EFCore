@@ -4,21 +4,27 @@ using ConsoleApp2.Models;
 
 using Microsoft.EntityFrameworkCore;
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace ConsoleApp2.Services
 {
-    public class CategoryManager : IRepositary<Category>
+    public class ManufacturerManager : IRepositary<Manufacturer>
     {
         private readonly EntityContext _dbContext;
-        public CategoryManager(EntityContext dbContext)
+        public ManufacturerManager(EntityContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<ResultModel> AddAsync(Category product)
+        public async Task<ResultModel> AddAsync(Manufacturer manufacturer)
         {
             try
             {
-                await _dbContext.Categories.AddAsync(product);
+                await _dbContext.Manufacturers.AddAsync(manufacturer);
 
                 await _dbContext.SaveChangesAsync();
 
@@ -30,65 +36,65 @@ namespace ConsoleApp2.Services
             }
         }
 
-        public async Task<ResultModel> DeleteAsync(int productId)
+        public async Task<ResultModel> DeleteAsync(int manufacturerId)
         {
             try
             {
-                var category = await _dbContext.Categories.FindAsync();
-                if(category == null)
+                var manufacturer = await _dbContext.Manufacturers.FindAsync();
+                if (manufacturer == null)
                 {
                     return new ResultModel { Success = false, Message = "Product not found" };
                 }
-                _dbContext.Categories.Remove(category);
+                _dbContext.Manufacturers.Remove(manufacturer);
 
                 await _dbContext.SaveChangesAsync();
 
                 return new ResultModel { Success = false, Message = "Category Succsesfuly deleted" };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new ResultModel { Success = false, Message = ex.Message };
             }
         }
 
-        public async Task<List<Category>> GetAllAsync()
+        public async Task<List<Manufacturer>> GetAllAsync()
         {
             try
             {
-                var categories = await _dbContext.Categories.ToListAsync();
-                if (categories == null) return null;
-                return categories;
+                var manufacturers = await _dbContext.Manufacturers.ToListAsync();
+                if (manufacturers == null) return null;
+                return manufacturers;
             }
-            catch(Exception ex)
-            {
-                return null;
-            }   
-        }
-
-        public async Task<Category> GetByIdAsync(int productId)
-        {
-            try
-            {
-                var category = await _dbContext.Categories.FindAsync(productId);
-                if (category == null) return null;
-                return category;
-            }
-            catch 
+            catch (Exception ex)
             {
                 return null;
             }
         }
 
-        public async Task<ResultModel> UpdateAsync(Category category)
+        public async Task<Manufacturer> GetByIdAsync(int manufacturerId)
         {
             try
             {
-                var updatedCategory = await _dbContext.Categories.FindAsync(category.Id);
-                if (updatedCategory == null) return new ResultModel { Success = false, Message = "Category not found" };
+                var manufacturer = await _dbContext.Manufacturers.FindAsync(manufacturerId);
+                if (manufacturer == null) return null;
+                return manufacturer;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
-                category.Name = updatedCategory.Name;
+        public async Task<ResultModel> UpdateAsync(Manufacturer manufacturer)
+        {
+            try
+            {
+                var updatedManufacturer = await _dbContext.Manufacturers.FindAsync(manufacturer.Id);
+                if (updatedManufacturer == null) return new ResultModel { Success = false, Message = "Category not found" };
 
-                _dbContext.Categories.Update(category);
+                manufacturer.Name = updatedManufacturer.Name;
+
+                _dbContext.Manufacturers.Update(manufacturer);
                 await _dbContext.SaveChangesAsync();
                 return new ResultModel { Success = true, Message = "Category Updated Successfully" };
             }

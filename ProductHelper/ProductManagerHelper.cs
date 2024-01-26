@@ -1,5 +1,6 @@
 ﻿using ConsoleApp2.Interface;
 using ConsoleApp2.Models;
+
 using System.Reflection.Metadata.Ecma335;
 
 namespace ConsoleApp2.ProductHelper
@@ -8,19 +9,34 @@ namespace ConsoleApp2.ProductHelper
     {
 
         private readonly IRepositary<Product> _productManager;
-        private readonly IRepositary<Category> _categoryManager;
+        private readonly IRepositary<Category> _categoryRepository;
+        private readonly IRepositary<Manufacturer> _manufacturerRepositary;
 
-        public ProductManagerHelper(IRepositary<Product> productManager, IRepositary<Category> categoryManager)
+        public ProductManagerHelper(IRepositary<Product> productManager, IRepositary<Category> categoryRepository,IRepositary<Manufacturer> manufacturerRepositary)
         {
             _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
-            _categoryManager = categoryManager;
+            _categoryRepository = categoryRepository;
+            _manufacturerRepositary = manufacturerRepositary;
         }
 
         public async Task AddProduct()
         {
             var product = WriteProductDetails();
 
-            CheckingCategory(product.CategoryId);
+            var category = await _categoryRepository.GetByIdAsync(product.CategoryId);
+            if (category == null)
+            {
+                category = new Category { Name = "Some Category" };
+                await _categoryRepository.AddAsync(category);
+            }
+
+            var manufacturer = await _manufacturerRepositary.GetByIdAsync(product.ManufacturerId);
+
+            if (manufacturer == null)
+            {
+                manufacturer = new Manufacturer { Name = "Some Manufacturer" };
+                await _manufacturerRepositary.AddAsync(manufacturer);
+            }
 
             var result = await _productManager.AddAsync(product);
             if (result.Success)
@@ -43,15 +59,15 @@ namespace ConsoleApp2.ProductHelper
         public async Task UpdateProduct()
         {
             Console.WriteLine("Write Product Id");
+            int productId = int.Parse(Console.ReadLine());
             var productMessage = WriteProductDetails();
-           
-            CheckingCategory(productMessage.CategoryId);
+            productMessage.Id = productId;
 
             var result = await _productManager.UpdateAsync(productMessage);
 
             if (result.Success)
                 Console.WriteLine("Success updated Product");
-            else 
+            else
                 Console.Write(result.Message);
         }
 
@@ -117,24 +133,16 @@ namespace ConsoleApp2.ProductHelper
 
             Console.WriteLine("Write Product Category Id:");
             int categoryId = int.Parse(Console.ReadLine());
-            
+            int manufacturerId = categoryId;
+
             return new Product
             {
                 Name = name,
                 Description = description,
                 Price = price,
-                CategoryId = categoryId
+                CategoryId = categoryId,
+                ManufacturerId = manufacturerId
             };
-        }
-        public void CheckingCategory(int categoryId)
-        {
-            if (_categoryManager.GetByIdAsync(categoryId) == null)
-            {
-                Category category = new Category();
-                category.Name = "Default";
-                category.Id = categoryId;
-                _categoryManager.AddAsync(category);
-            }
         }
     }
 }

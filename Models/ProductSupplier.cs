@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ConsoleApp2.Models
+﻿namespace ConsoleApp2.Models
 {
     public class ProductSupplier
     {
-        [Key]
         public int Id { get; set; } 
 
         public int ProductId { get; set; }
